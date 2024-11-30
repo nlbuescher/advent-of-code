@@ -5,7 +5,7 @@ use std::io::Result;
 use std::io::{BufRead, BufReader};
 
 const DAY: &str = "NN"; // TODO: Fill the day
-const INPUT_FILE: &str = "input/NN.txt";
+const INPUT_FILE: &str = "src/input/NN.txt";
 
 const TEST: &str = "\
 <TEST-INPUT>
