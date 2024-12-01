@@ -1,0 +1,8 @@
+[package]
+name = "advent-of-code-2024"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+code-timing-macros = "0.0.5"
+tap = "1.0.1"
