@@ -2,7 +2,6 @@ use std::cmp::min;
 use advent_of_code_2015::*;
 use code_timing_macros::*;
 use std::fs::File;
-use std::io::Result;
 use std::io::{BufRead, BufReader};
 
 const DAY: &str = "01";
