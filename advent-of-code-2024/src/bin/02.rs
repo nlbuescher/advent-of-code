@@ -24,7 +24,9 @@ fn main() -> Result<()> {
 	println!("=== Part 1 ===");
 
 	fn read_input<R: BufRead>(reader: R) -> Vec<Vec<usize>> {
-		reader.lines().flatten()
+		reader
+			.lines()
+			.flatten()
 			.map(|line| {
 				line.split(' ')
 					.flat_map(usize::from_str)
@@ -36,17 +38,18 @@ fn main() -> Result<()> {
 	fn part1<R: BufRead>(reader: R) -> Result<usize> {
 		let input = read_input(reader);
 
-		let answer = input.iter()
+		let answer = input
+			.iter()
 			.filter(|report| {
-				report.into_iter()
-					.pipe(|iter| {
-						iter.clone().zip(iter.clone().skip(1))
-					})
+				report
+					.into_iter()
+					.pipe(|iter| iter.clone().zip(iter.clone().skip(1)))
 					.pipe_borrow_mut(|list| {
 						let is_ascending = list.clone().all(|(a, b)| *a < *b);
 						let is_descending = list.clone().all(|(a, b)| *a > *b);
-						let is_gradual = list.all(|(a, b)| a.abs_diff(*b) > 0 && a.abs_diff(*b) < 4);
-						
+						let is_gradual =
+							list.all(|(a, b)| a.abs_diff(*b) > 0 && a.abs_diff(*b) < 4);
+
 						(is_ascending || is_descending) && is_gradual
 					})
 			})
@@ -63,17 +66,48 @@ fn main() -> Result<()> {
 	//endregion
 
 	//region Part 2
-	// println!("\n=== Part 2 ===");
-	// 
-	// fn part2<R: BufRead>(reader: R) -> Result<usize> {
-	//     Ok(0)
-	// }
-	// 
-	// assert_eq!(0, part2(BufReader::new(TEST.as_bytes()))?);
-	// 
-	// let input_file = BufReader::new(File::open(INPUT_FILE)?);
-	// let result = time_snippet!(part2(input_file)?);
-	// println!("Result = {result}");
+	println!("\n=== Part 2 ===");
+
+	fn part2<R: BufRead>(reader: R) -> Result<usize> {
+		let input = read_input(reader);
+
+		let answer = input
+			.into_iter()
+			.filter(|report| {
+				(0..report.len())
+					.map(|to_remove| {
+						report
+							.iter()
+							.enumerate()
+							.filter(|&(index, _)| index != to_remove)
+							.map(|(_, &value)| value)
+							.collect::<Vec<_>>()
+					})
+					.any(|permutation| {
+						permutation
+							.into_iter()
+							.pipe(|iter| iter.clone().zip(iter.clone().skip(1)).collect::<Vec<_>>())
+							.pipe(|list| {
+								let is_ascending = list.iter().all(|&(a, b)| a < b);
+								let is_descending = list.iter().all(|&(a, b)| a > b);
+								let is_gradual = list
+									.iter()
+									.all(|&(a, b)| a.abs_diff(b) > 0 && a.abs_diff(b) < 4);
+
+								(is_ascending || is_descending) && is_gradual
+							})
+					})
+			})
+			.count();
+
+		Ok(answer)
+	}
+
+	assert_eq!(4, part2(BufReader::new(TEST.as_bytes()))?);
+
+	let input_file = BufReader::new(File::open(INPUT_FILE)?);
+	let result = time_snippet!(part2(input_file)?);
+	println!("Result = {result}");
 	//endregion
 
 	Ok(())
