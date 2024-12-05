@@ -20,11 +20,10 @@ const TEST: &str = "\
 fn main() -> Result<()> {
 	start_day(DAY);
 
-	//region Part 1
-	println!("=== Part 1 ===");
-
 	fn read_input<R: BufRead>(reader: R) -> (Vec<i64>, Vec<i64>) {
-		reader.lines().flatten()
+		reader
+			.lines()
+			.flatten()
 			.map(|line| {
 				line.split("   ")
 					.flat_map(|string| i64::from_str(string))
@@ -33,11 +32,15 @@ fn main() -> Result<()> {
 			.unzip()
 	}
 
+	//region Part 1
+	println!("=== Part 1 ===");
+
 	fn part1<R: BufRead>(reader: R) -> Result<i64> {
 		let mut input: (Vec<_>, Vec<_>) = read_input(reader);
 
 		let answer = input.pipe_borrow_mut(|(a, b)| {
-			a.sort(); b.sort();
+			a.sort();
+			b.sort();
 			a.iter().zip(b.iter()).map(|(a, b)| (a - b).abs()).sum()
 		});
 
@@ -57,10 +60,10 @@ fn main() -> Result<()> {
 	fn part2<R: BufRead>(reader: R) -> Result<i64> {
 		let input = read_input(reader);
 
-		let answer = input.0.iter()
-			.map(|target| {
-				*target * input.1.iter().filter(|it| *it == target).count() as i64
-			})
+		let answer = input
+			.0
+			.iter()
+			.map(|target| *target * input.1.iter().filter(|it| *it == target).count() as i64)
 			.sum();
 
 		Ok(answer)

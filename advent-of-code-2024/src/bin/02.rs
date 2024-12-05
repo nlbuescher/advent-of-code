@@ -20,9 +20,6 @@ const TEST: &str = "\
 fn main() -> Result<()> {
 	start_day(DAY);
 
-	//region Part 1
-	println!("=== Part 1 ===");
-
 	fn read_input<R: BufRead>(reader: R) -> Vec<Vec<usize>> {
 		reader
 			.lines()
@@ -34,6 +31,9 @@ fn main() -> Result<()> {
 			})
 			.collect::<Vec<_>>()
 	}
+
+	//region Part 1
+	println!("=== Part 1 ===");
 
 	fn part1<R: BufRead>(reader: R) -> Result<usize> {
 		let input = read_input(reader);
