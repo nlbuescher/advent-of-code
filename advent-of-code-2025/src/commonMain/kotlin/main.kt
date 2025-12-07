@@ -6,16 +6,30 @@ fun main(vararg args: String) {
 		error("Please provide at least one day to run.")
 	}
 
-	val days = args.map { arg ->
-		arg.toIntOrNull()
-			?.let { day ->
+	val days = buildList {
+		args.forEach { arg ->
+			if (arg.matches(Regex("""^\d+-\d+$"""))) {
+				val (start, end) = arg.split('-').map(String::toInt)
+
+				if (start !in 1..25 || end !in 1..25 || start > end) {
+					error("Day range '$arg' is not between 1 and 25 or start is greater than end.")
+				}
+
+				addAll((start..end).map(::getDay))
+			}
+			else if (arg.matches(Regex("""^\d+$"""))) {
+				val day = arg.toInt()
+
 				if (day !in 1..25) {
 					error("Day '$day' is not between 1 and 25.")
 				}
 
-				getDay(day)
+				add(getDay(day))
 			}
-			?: error("Day '$arg' is not an integer.")
+			else {
+				error("Invalid day argument '$arg'. Expected a day number or a range of days.")
+			}
+		}
 	}
 
 	var runtime = Duration.ZERO
@@ -23,7 +37,7 @@ fun main(vararg args: String) {
 	days.forEach { day ->
 		val (solutions, elapsed) = measureTimedValue { day.solve() }
 
-		println("\n=== Day $day")
+		println("\n=== $day")
 		println("  • Part 1: ${solutions.first}")
 		println("  • Part 2: ${solutions.second}")
 		println("  • Elapsed: $elapsed")
