@@ -8,8 +8,10 @@ plugins {
 kotlin {
 	targets.withType<KotlinNativeTarget> {
 		if (HostManager.host == this.konanTarget) {
-			binaries.executable {
-				entryPoint = "main"
+			binaries {
+				executable {
+					entryPoint = "main"
+				}
 			}
 		}
 	}
