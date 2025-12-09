@@ -1,9 +1,9 @@
 plugins {
-	id("application-conventions")
+	id("conventions")
 }
 
 kotlin {
 	sourceSets.commonMain.dependencies {
-		implementation(projects.adventOfCodeCore)
+		api(projects.adventOfCodeCore)
 	}
 }

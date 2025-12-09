@@ -9,6 +9,8 @@ repositories {
 }
 
 kotlin {
+	jvm()
+
 	linuxX64()
 	linuxArm64()
 	mingwX64()
@@ -16,5 +18,9 @@ kotlin {
 	if (HostManager.hostIsMac) {
 		macosX64()
 		macosArm64()
+	}
+
+	sourceSets.commonTest.dependencies {
+		implementation(kotlin("test"))
 	}
 }

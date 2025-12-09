@@ -1,3 +1,10 @@
-object Day11 : Day() {
-	override fun solve(input: String): Pair<Solution?, Solution?> = null to null
+package dev.buescher.adventofcode.mmxxv
+
+import dev.buescher.adventofcode.core.*
+
+object Day11 : Day {
+	override val yearNumber: String = "2025"
+	override val dayNumber: String = "11"
+
+	override fun solve(input: String): Pair<Any?, Any?> = null to null
 }

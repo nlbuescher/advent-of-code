@@ -1,17 +1,18 @@
+package dev.buescher.adventofcode.core
+
 import kotlinx.io.*
 import kotlinx.io.files.*
 
-abstract class Day {
-	abstract fun solve(input: String): Pair<Solution?, Solution?>
+interface Day {
+	val yearNumber: String
+	val dayNumber: String
 
-	fun solve(): Pair<Solution?, Solution?> = solve(readInput())
+	fun solve(input: String): Pair<Any?, Any?>
 
-	override fun toString(): String = this::class.simpleName!!.let { className ->
-		val i = className.indexOfFirst(Char::isDigit)
-		"${className.take(i)} ${className.drop(i)}"
-	}
+	fun solve(): Pair<Any?, Any?> = solve(readInput())
 
 	private fun readInput(): String {
-		return SystemFileSystem.source(Path("input/${this::class.simpleName}.txt")).buffered().readString()
+		return SystemFileSystem.source(Path("advent-of-code-$yearNumber/src/commonMain/resources/Day${dayNumber}.txt"))
+			.buffered().readString()
 	}
 }

@@ -1,4 +1,11 @@
-object Day01 : Day() {
+package dev.buescher.adventofcode.mmxxv
+
+import dev.buescher.adventofcode.core.*
+
+object Day01 : Day {
+	override val yearNumber: String = "2025"
+	override val dayNumber: String = "01"
+
 	private const val DIAL_START = 50
 	private const val DIAL_SIZE = 100
 
@@ -17,7 +24,7 @@ object Day01 : Day() {
 			}
 	}
 
-	override fun solve(input: String): Pair<Solution?, Solution?> {
+	override fun solve(input: String): Pair<Any?, Any?> {
 		var solution1 = 0
 		var solution2 = 0
 
@@ -42,6 +49,6 @@ object Day01 : Day() {
 			nextPosition.mod(100)
 		}
 
-		return Solution.of(solution1) to Solution.of(solution2)
+		return solution1 to solution2
 	}
 }

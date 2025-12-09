@@ -1,7 +1,9 @@
+package dev.buescher.adventofcode.mmxxv
+
 import kotlin.test.*
 
 class Tests {
-	fun test(day: Int, expected: Pair<Solution?, Solution?>, testInput: String) {
+	fun test(day: Int, expected: Pair<Any?, Any?>, testInput: String) {
 		val actual = getDay(day).solve(testInput)
 
 		assertEquals(expected, actual)
@@ -9,7 +11,9 @@ class Tests {
 
 	@Test
 	fun day01() = test(
-		day = 1, expected = Solution.of(3) to Solution.of(6), testInput = """
+		day = 1,
+		expected = 3 to 6,
+		testInput = """
 			L68
 			L30
 			R48
@@ -20,6 +24,6 @@ class Tests {
 			L99
 			R14
 			L82
-		""".trimIndent()
+		""".trimIndent(),
 	)
 }
