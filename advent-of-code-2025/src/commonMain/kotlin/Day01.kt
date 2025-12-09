@@ -2,27 +2,9 @@ package dev.buescher.adventofcode.mmxxv
 
 import dev.buescher.adventofcode.core.*
 
-object Day01 : Day {
-	override val yearNumber: String = "2025"
-	override val dayNumber: String = "01"
-
+object Day01 : Day("2025", "01") {
 	private const val DIAL_START = 50
 	private const val DIAL_SIZE = 100
-
-	private fun processInput(input: String): List<Int> {
-		return input
-			.lines()
-			.filter(String::isNotEmpty)
-			.map {
-				if (it.startsWith('L')) {
-					it.substringAfter("L").toInt().unaryMinus()
-				}
-				else if (it.startsWith('R')) {
-					it.substringAfter("R").toInt()
-				}
-				else error("Invalid input: '$it'. Expected 'L' or 'R' prefix.")
-			}
-	}
 
 	override fun solve(input: String): Pair<Any?, Any?> {
 		var solution1 = 0
@@ -50,5 +32,19 @@ object Day01 : Day {
 		}
 
 		return solution1 to solution2
+	}
+
+	private fun processInput(input: String): List<Int> {
+		return input
+			.lines()
+			.map {
+				if (it.startsWith('L')) {
+					it.substringAfter("L").toInt().unaryMinus()
+				}
+				else if (it.startsWith('R')) {
+					it.substringAfter("R").toInt()
+				}
+				else error("Invalid input: '$it'. Expected 'L' or 'R' prefix.")
+			}
 	}
 }

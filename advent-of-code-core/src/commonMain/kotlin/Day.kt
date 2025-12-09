@@ -3,16 +3,13 @@ package dev.buescher.adventofcode.core
 import kotlinx.io.*
 import kotlinx.io.files.*
 
-interface Day {
-	val yearNumber: String
-	val dayNumber: String
-
-	fun solve(input: String): Pair<Any?, Any?>
+abstract class Day(val year: String, val day: String) {
+	abstract fun solve(input: String): Pair<Any?, Any?>
 
 	fun solve(): Pair<Any?, Any?> = solve(readInput())
 
 	private fun readInput(): String {
-		return SystemFileSystem.source(Path("advent-of-code-$yearNumber/src/commonMain/resources/Day${dayNumber}.txt"))
-			.buffered().readString()
+		return SystemFileSystem.source(Path("advent-of-code-$year/src/commonMain/resources/Day${day}.txt"))
+			.buffered().readString().trim()
 	}
 }

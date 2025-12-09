@@ -17,7 +17,7 @@ fun main(vararg args: String) {
 		val (solutions, elapsed) = measureTimedValue { solver.solve() }
 		val (solution1, solution2) = solutions
 
-		println("\n=== Day ${solver.dayNumber}")
+		println("\n=== Day ${solver.day}")
 		println("  • Part 1:  $solution1")
 		println("  • Part 2:  $solution2")
 		println("  • Elapsed: $elapsed")
