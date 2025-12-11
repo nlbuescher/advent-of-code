@@ -42,6 +42,7 @@ fun parseArguments(vararg args: String): List<Run> {
 			.matchEntire(arg)
 			?.groupValues
 			?.drop(1)
+			?.filter(String::isNotBlank)
 			?.map(String::toInt)
 
 		when (parts?.size) {
