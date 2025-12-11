@@ -1,0 +1,18 @@
+edition = "2024"
+style_edition = "2024"
+
+hard_tabs = true
+tab_spaces = 4
+
+format_macro_matchers = true
+
+control_brace_style = "ClosingNextLine"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
+
+condense_wildcard_suffixes = true
+hex_literal_case = "Lower"
+overflow_delimited_expr = true
+reorder_impl_items = true
+use_field_init_shorthand = true
+use_try_shorthand = true

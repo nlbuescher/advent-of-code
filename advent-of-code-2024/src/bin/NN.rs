@@ -1,10 +1,11 @@
-use advent_of_code_2024::*;
-use code_timing_macros::*;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
+use advent_of_code_2024::*;
+use code_timing_macros::*;
+
 const DAY: &str = "NN"; // TODO: Fill the day
-const INPUT_FILE: &str = "input/NN.txt";
+const INPUT_FILE: &str = "advent-of-code-2024/input/NN.txt";
 
 const TEST: &str = "\
 <TEST-INPUT>
@@ -32,13 +33,13 @@ fn main() -> Result<()> {
 
 	//region Part 2
 	// println!("\n=== Part 2 ===");
-	// 
+	//
 	// fn part2<R: BufRead>(reader: R) -> Result<usize> {
 	// 	Ok(0)
 	// }
-	// 
+	//
 	// assert_eq!(0, part2(BufReader::new(TEST.as_bytes()))?);
-	// 
+	//
 	// let input_file = BufReader::new(File::open(INPUT_FILE)?);
 	// let result = time_snippet!(part2(input_file)?);
 	// println!("Result = {result}");

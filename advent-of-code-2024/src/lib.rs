@@ -1,5 +1,4 @@
-use std::fmt;
-use std::io;
+use std::{fmt, io};
 
 pub fn start_day(day: &str) {
 	println!("Advent of Code 2024 – Day {day:0>2}");

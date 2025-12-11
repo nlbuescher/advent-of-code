@@ -1,12 +1,13 @@
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+
 use advent_of_code_2024::*;
 use code_timing_macros::*;
 use regex::Regex;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use tap::Pipe;
 
 const DAY: &str = "03";
-const INPUT_FILE: &str = "input/03.txt";
+const INPUT_FILE: &str = "advent-of-code-2024/input/03.txt";
 
 const TEST: &str = "\
 xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
@@ -57,15 +58,18 @@ fn main() -> Result<()> {
 
 				if string == "do()" {
 					(true, acc)
-				} else if string == "don't()" {
+				}
+				else if string == "don't()" {
 					(false, acc)
-				} else {
+				}
+				else {
 					(
 						doing,
 						if doing {
 							acc + capture["a"].parse::<usize>().unwrap()
 								* capture["b"].parse::<usize>().unwrap()
-						} else {
+						}
+						else {
 							acc
 						},
 					)

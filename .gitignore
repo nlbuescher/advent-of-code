@@ -1,4 +1,14 @@
-.gradle
+# Jetbrains IDE
+.DS_Store
 .idea
-.kotlin
+
+# Gradle
+.gradle
 build
+
+# Kotlin Multiplatform
+.kotlin
+
+# Rust
+Cargo.lock
+target

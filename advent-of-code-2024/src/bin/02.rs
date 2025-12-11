@@ -1,12 +1,13 @@
-use advent_of_code_2024::*;
-use code_timing_macros::*;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::str::FromStr;
+
+use advent_of_code_2024::*;
+use code_timing_macros::*;
 use tap::Pipe;
 
 const DAY: &str = "02";
-const INPUT_FILE: &str = "input/02.txt";
+const INPUT_FILE: &str = "advent-of-code-2024/input/02.txt";
 
 const TEST: &str = "\
 7 6 4 2 1
