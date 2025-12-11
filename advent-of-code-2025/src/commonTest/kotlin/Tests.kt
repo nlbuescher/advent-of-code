@@ -46,4 +46,22 @@ class Tests {
 			818181911112111
 		""".trimIndent(),
 	)
+
+	@Test
+	fun day04() = test(
+		day = 4,
+		expected = Solutions(part1 = 13, part2 = null),
+		testInput = """
+			..@@.@@@@.
+			@@@.@.@.@@
+			@@@@@.@.@@
+			@.@@@@..@.
+			@@.@@@@.@@
+			.@@@@@@@.@
+			.@.@.@.@@@
+			@.@@@.@@@@
+			.@@@@@@@@.
+			@.@.@@@.@.
+		""".trimIndent()
+	)
 }
