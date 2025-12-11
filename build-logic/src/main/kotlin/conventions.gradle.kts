@@ -9,6 +9,13 @@ repositories {
 }
 
 kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll(
+			"-opt-in", "kotlin.ExperimentalUnsignedTypes",
+			"-opt-in", "kotlin.time.ExperimentalTime",
+		)
+	}
+
 	jvm()
 
 	linuxX64()

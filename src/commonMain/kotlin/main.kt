@@ -6,7 +6,6 @@ import kotlin.time.*
 
 data class Run(val year: Int, val day: Int)
 
-@OptIn(ExperimentalTime::class)
 fun main(vararg args: String) {
 	val runs = parseArguments(*args)
 

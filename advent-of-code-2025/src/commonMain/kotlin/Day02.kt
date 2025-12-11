@@ -3,20 +3,8 @@ package dev.buescher.adventofcode.mmxxv
 import dev.buescher.adventofcode.core.*
 import kotlin.math.*
 
-@OptIn(ExperimentalUnsignedTypes::class)
 object Day02 : Day("2025", "02") {
-	private val pow10 = ulongArrayOf(
-		1UL,
-		10UL,
-		100UL,
-		1_000UL,
-		10_000UL,
-		100_000UL,
-		1_000_000UL,
-		10_000_000UL,
-		100_000_000UL,
-		1_000_000_000UL,
-	)
+	private val pow10 = ULongArray(15) { i -> 10.0.pow(i).toULong() }
 
 	override fun solve(input: String): Solutions {
 		val ids = processInput(input)
