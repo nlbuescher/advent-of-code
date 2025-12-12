@@ -1,61 +1,78 @@
+@file:Suppress("unused")
+
 package dev.buescher.adventofcode.core
 
 import kotlin.math.*
 
+data class Point(val x: Int, val y: Int)
+
 class Grid private constructor(
-	private val data: List<String>,
-	private val startX: Int,
-	private val startY: Int,
-	private val endX: Int,
-	private val endY: Int,
+	private val data: List<CharArray>,
+	private val start: Point,
+	private val end: Point,
 ) : Iterable<Grid.Cell> {
-	val width: Int get() = endX - startX
-	val height: Int get() = endY - startY
+	val width: Int get() = end.x - start.x
+	val height: Int get() = end.y - start.y
 
 	constructor(data: List<String>) : this(
-		data,
-		startX = 0,
-		startY = 0,
-		endX = if (data.isNotEmpty()) data.first().length else 0,
-		endY = data.size,
+		data.map(String::toCharArray),
+		start = Point(x = 0, y = 0),
+		end = Point(
+			x = if (data.isNotEmpty()) data.first().length else 0,
+			y = data.size,
+		),
 	) {
 		require(data.all { it.length == width }) {
 			"All rows in the grid must have the same width ($width)"
 		}
 	}
 
-	operator fun get(x: Int, y: Int): Cell {
+	operator fun get(x: Int, y: Int): Char = data[start.y + y][start.x + x]
+	operator fun set(x: Int, y: Int, value: Char) = data[start.y + y].set(start.x + x, value)
+
+	fun getCell(x: Int, y: Int): Cell {
 		checkBounds(x, y, width, height)
 		return Cell(this, x, y)
 	}
 
-	fun getValue(x: Int, y: Int): Char = data[startY + y][startX + x]
+	fun getRow(row: Int): Row {
+		checkBounds(0, row, width, height)
+		return Row((0 until width).asSequence().map { column -> getCell(column, row) })
+	}
 
-	fun rows(): Sequence<Sequence<Cell>> {
+	fun getColumn(column: Int): Column {
+		checkBounds(column, 0, width, height)
+		return Column((0 until height).asSequence().map { row -> getCell(column, row) })
+	}
+
+	override fun iterator(): Iterator<Cell> = cells().iterator()
+
+	fun cells(): Sequence<Cell> = rows().flatten()
+
+	class Row internal constructor(row: Sequence<Cell>) : Sequence<Cell> by row
+
+	fun rows(): Sequence<Row> {
 		return (0 until height).asSequence().map { y ->
-			(0 until width).asSequence().map { x -> get(x, y) }
+			(0 until width).asSequence().map { x -> getCell(x, y) }.let(::Row)
 		}
 	}
 
-	fun columns(): Sequence<Sequence<Cell>> {
+	class Column internal constructor(column: Sequence<Cell>) : Sequence<Cell> by column
+
+	fun columns(): Sequence<Column> {
 		return (0 until width).asSequence().map { x ->
-			(0 until height).asSequence().map { y -> get(x, y) }
+			(0 until height).asSequence().map { y -> getCell(x, y) }.let(::Column)
 		}
 	}
-
-	override fun iterator(): Iterator<Cell> = rows().flatten().iterator()
 
 	override fun hashCode(): Int = data.hashCode()
 
 	override fun equals(other: Any?): Boolean = other is Grid && this.data == other.data
 
-	override fun toString() = "(($startX, $startY)\n ($endX, $endY))"
-
 	class Cell internal constructor(private val grid: Grid, val x: Int, val y: Int) {
-		val value: Char
-			get() {
-				return grid.data[grid.startY + y][grid.startX + x]
-			}
+		var value: Char
+			get() = grid[x, y]
+			set(value) = grid.set(x, y, value)
 
 		fun neighbors(): Sequence<Cell> {
 			val startX = max(0, x - 1)
@@ -72,18 +89,9 @@ class Grid private constructor(
 				.map { (x, y) -> Cell(grid, x, y) }
 		}
 
-		override fun hashCode(): Int {
-			var result = grid.hashCode()
-			result = 31 * result + x.hashCode()
-			result = 31 * result + y.hashCode()
-			return result
-		}
+		override fun hashCode(): Int = value.hashCode()
 
-		override fun equals(other: Any?) =
-			other is Cell
-				&& grid == other.grid
-				&& x == other.x
-				&& y == other.y
+		override fun equals(other: Any?) = other is Cell && value == other.value
 
 		override fun toString() = "($x, $y)"
 	}

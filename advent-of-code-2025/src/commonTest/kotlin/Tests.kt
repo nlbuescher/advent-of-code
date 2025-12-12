@@ -50,7 +50,7 @@ class Tests {
 	@Test
 	fun day04() = test(
 		day = 4,
-		expected = Solutions(part1 = 13, part2 = null),
+		expected = Solutions(part1 = 13, part2 = 43),
 		testInput = """
 			..@@.@@@@.
 			@@@.@.@.@@

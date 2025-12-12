@@ -6,15 +6,39 @@ object Day04 : Day("2025", "04") {
 	override fun solve(input: String): Solutions {
 		val grid = processInput(input)
 
-		val part1 = grid
-			.filter { it.value == '@' }
+		val part1 = grid.cells()
+			.filter { it.value != '.' }
 			.count { cell ->
-				cell.neighbors()
+				val neighborCount = cell.neighbors()
 					.count { neighbor -> cell.value == neighbor.value }
-					.let { neighborCount -> neighborCount < 4 }
+
+				neighborCount < 4
 			}
 
-		val part2 = null
+		var part2 = 0
+
+		var removed: Int
+		do {
+			removed = grid.cells()
+				.filter { it.value != '.' }
+				.count { cell ->
+					val neighborCount = cell.neighbors()
+						.count { neighbor -> cell.value == neighbor.value }
+
+					if (neighborCount < 4) {
+						cell.value = 'x'
+						return@count true
+					}
+					else return@count false
+				}
+
+			part2 += removed
+
+			grid.cells()
+				.filter { it.value == 'x' }
+				.forEach { it.value = '.' }
+		}
+		while (removed != 0)
 
 		return Solutions(part1, part2)
 	}
