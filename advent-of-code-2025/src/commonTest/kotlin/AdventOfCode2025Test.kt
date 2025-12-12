@@ -1,9 +1,9 @@
 package dev.buescher.adventofcode.mmxxv
 
-import dev.buescher.adventofcode.core.Solutions
+import dev.buescher.adventofcode.core.*
 import kotlin.test.*
 
-class Tests {
+class AdventOfCode2025Test {
 	fun test(day: Int, expected: Solutions, testInput: String) {
 		val actual = getDay(day).solve(testInput)
 
@@ -62,6 +62,25 @@ class Tests {
 			@.@@@.@@@@
 			.@@@@@@@@.
 			@.@.@@@.@.
-		""".trimIndent()
+		""".trimIndent(),
+	)
+
+	@Test
+	fun day05() = test(
+		day = 5,
+		expected = Solutions(part1 = 3, part2 = 14),
+		testInput = """
+			3-5
+			10-14
+			16-20
+			12-18
+
+			1
+			5
+			8
+			11
+			17
+			32
+		""".trimIndent(),
 	)
 }

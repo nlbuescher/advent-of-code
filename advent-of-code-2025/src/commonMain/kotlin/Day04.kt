@@ -4,7 +4,7 @@ import dev.buescher.adventofcode.core.*
 
 object Day04 : Day("2025", "04") {
 	override fun solve(input: String): Solutions {
-		val grid = processInput(input)
+		val grid = Grid(input.lines())
 
 		val part1 = grid.cells()
 			.filter { it.value != '.' }
@@ -42,6 +42,4 @@ object Day04 : Day("2025", "04") {
 
 		return Solutions(part1, part2)
 	}
-
-	fun processInput(input: String): Grid = Grid(input.trim().lines())
 }
