@@ -83,4 +83,16 @@ class AdventOfCode2025Test {
 			32
 		""".trimIndent(),
 	)
+
+	@Test
+	fun day06() = test(
+		day = 6,
+		expected = Solutions(part1 = 4277556, part2 = null),
+		testInput = """
+			123 328  51 64 
+			 45 64  387 23 
+			  6 98  215 314
+			*   +   *   +  
+		""".trimIndent(),
+	)
 }
