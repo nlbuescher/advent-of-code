@@ -2,7 +2,8 @@
 
 package dev.buescher.adventofcode.core
 
-import kotlin.math.*
+import dev.buescher.adventofcode.core.Grid.Column.Order.*
+import dev.buescher.adventofcode.core.Grid.Row.Order.*
 
 data class Point(val x: Int, val y: Int)
 
@@ -10,13 +11,16 @@ class Grid private constructor(
 	private val data: List<CharArray>,
 	private val start: Point,
 	private val end: Point,
-) : Iterable<Grid.Cell> {
+) {
 	val width: Int get() = end.x - start.x
 	val height: Int get() = end.y - start.y
 
-	constructor(data: List<String>) : this(
-		data.map(String::toCharArray),
-		start = Point(x = 0, y = 0),
+	constructor(data: List<CharSequence>) : this(
+		data.map { it.toList().toCharArray() },
+		start = Point(
+			x = 0,
+			y = 0,
+		),
 		end = Point(
 			x = if (data.isNotEmpty()) data.first().length else 0,
 			y = data.size,
@@ -35,39 +39,64 @@ class Grid private constructor(
 		return Cell(this, x, y)
 	}
 
-	fun getRow(row: Int): Row {
+	class Row internal constructor(row: Sequence<Cell>) : Sequence<Cell> by row {
+		enum class Order { LeftToRight, RightToLeft }
+	}
+
+	private val rowIndicesTTB = 0 until height
+	private val rowIndicesBTT = height - 1 downTo 0
+
+	fun getRowIndices(columnOrder: Column.Order = TopToBottom): IntProgression = when (columnOrder) {
+		TopToBottom -> rowIndicesTTB
+		BottomToTop -> rowIndicesBTT
+	}
+
+	fun getRow(row: Int, rowOrder: Row.Order = LeftToRight): Row {
 		checkBounds(0, row, width, height)
-		return Row((0 until width).asSequence().map { column -> getCell(column, row) })
+		return Row(getColumnIndices(rowOrder).asSequence().map { x -> Cell(this, x, row) })
 	}
 
-	fun getColumn(column: Int): Column {
-		checkBounds(column, 0, width, height)
-		return Column((0 until height).asSequence().map { row -> getCell(column, row) })
-	}
-
-	override fun iterator(): Iterator<Cell> = cells().iterator()
-
-	fun cells(): Sequence<Cell> = rows().flatten()
-
-	class Row internal constructor(row: Sequence<Cell>) : Sequence<Cell> by row
-
-	fun rows(): Sequence<Row> {
-		return (0 until height).asSequence().map { y ->
-			(0 until width).asSequence().map { x -> getCell(x, y) }.let(::Row)
+	fun rows(rowOrder: Row.Order = LeftToRight, columnOrder: Column.Order = TopToBottom): Sequence<Row> {
+		return getRowIndices(columnOrder).asSequence().map { y ->
+			Row(
+				getColumnIndices(rowOrder).asSequence().map { x ->
+					Cell(this, x, y)
+				},
+			)
 		}
 	}
 
-	class Column internal constructor(column: Sequence<Cell>) : Sequence<Cell> by column
+	class Column internal constructor(column: Sequence<Cell>) : Sequence<Cell> by column {
+		enum class Order { TopToBottom, BottomToTop }
+	}
 
-	fun columns(): Sequence<Column> {
-		return (0 until width).asSequence().map { x ->
-			(0 until height).asSequence().map { y -> getCell(x, y) }.let(::Column)
+	private val columnIndicesLTR = 0 until width
+	private val columnIndicesRTL = width - 1 downTo 0
+
+	fun getColumnIndices(rowOrder: Row.Order = LeftToRight): IntProgression = when (rowOrder) {
+		LeftToRight -> columnIndicesLTR
+		RightToLeft -> columnIndicesRTL
+	}
+
+	fun getColumn(column: Int, order: Column.Order): Column {
+		checkBounds(column, 0, width, height)
+		return Column(getRowIndices(order).asSequence().map { row -> Cell(this, column, row) })
+	}
+
+	fun columns(columnOrder: Column.Order = TopToBottom, rowOrder: Row.Order = LeftToRight): Sequence<Column> {
+		return getColumnIndices(rowOrder).asSequence().map { x ->
+			Column(
+				getRowIndices(columnOrder).asSequence().map { y ->
+					Cell(this, x, y)
+				},
+			)
 		}
 	}
 
 	override fun hashCode(): Int = data.hashCode()
 
-	override fun equals(other: Any?): Boolean = other is Grid && this.data == other.data
+	override fun equals(other: Any?): Boolean =
+		other is Grid && this.data.withIndex().all { (i, it) -> it.contentEquals(other.data[i]) }
 
 	class Cell internal constructor(private val grid: Grid, val x: Int, val y: Int) {
 		var value: Char
@@ -75,13 +104,8 @@ class Grid private constructor(
 			set(value) = grid.set(x, y, value)
 
 		fun neighbors(): Sequence<Cell> {
-			val startX = max(0, x - 1)
-			val startY = max(0, y - 1)
-			val endX = min(grid.width, x + 2)
-			val endY = min(grid.height, y + 2)
-
-			val xRange = startX until endX
-			val yRange = startY until endY
+			val xRange = (x - 1).coerceAtLeast(0) until (x + 2).coerceAtMost(grid.width)
+			val yRange = (y - 1).coerceAtLeast(0) until (y + 2).coerceAtMost(grid.height)
 
 			return xRange.asSequence()
 				.flatMap { x -> yRange.asSequence().map { y -> x to y } }

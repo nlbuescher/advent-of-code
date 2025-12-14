@@ -6,7 +6,7 @@ object Day04 : Day("2025", "04") {
 	override fun solve(input: String): Solutions {
 		val grid = Grid(input.lines())
 
-		val part1 = grid.cells()
+		val part1 = grid.rows().flatten()
 			.filter { it.value != '.' }
 			.count { cell ->
 				val neighborCount = cell.neighbors()
@@ -19,7 +19,7 @@ object Day04 : Day("2025", "04") {
 
 		var removed: Int
 		do {
-			removed = grid.cells()
+			removed = grid.rows().flatten()
 				.filter { it.value != '.' }
 				.count { cell ->
 					val neighborCount = cell.neighbors()
@@ -34,7 +34,7 @@ object Day04 : Day("2025", "04") {
 
 			part2 += removed
 
-			grid.cells()
+			grid.rows().flatten()
 				.filter { it.value == 'x' }
 				.forEach { it.value = '.' }
 		}

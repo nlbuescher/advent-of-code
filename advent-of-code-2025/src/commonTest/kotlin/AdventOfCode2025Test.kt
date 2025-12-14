@@ -87,7 +87,7 @@ class AdventOfCode2025Test {
 	@Test
 	fun day06() = test(
 		day = 6,
-		expected = Solutions(part1 = 4277556, part2 = null),
+		expected = Solutions(part1 = 4277556, part2 = 3263827),
 		testInput = """
 			123 328  51 64 
 			 45 64  387 23 

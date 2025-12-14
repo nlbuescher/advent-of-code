@@ -10,6 +10,7 @@ abstract class Day(val year: String, val day: String) {
 
 	private fun readInput(): String {
 		return SystemFileSystem.source(Path("advent-of-code-$year/src/commonMain/resources/Day${day}.txt"))
-			.buffered().readString().trim()
+			.buffered()
+			.readString()
 	}
 }

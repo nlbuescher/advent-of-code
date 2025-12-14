@@ -1,31 +1,11 @@
 package dev.buescher.adventofcode.mmxxv
 
 import dev.buescher.adventofcode.core.*
+import dev.buescher.adventofcode.core.Grid.Row.Order.*
 
 object Day06 : Day("2025", "06") {
 	override fun solve(input: String): Solutions {
-		val operations = processInput(input)
-
-		val part1 = operations.sumOf { (operator, operands) ->
-			when (operator) {
-				Computation.Operator.Plus -> operands.reduce(ULong::plus)
-				Computation.Operator.Minus -> operands.reduce(ULong::minus)
-				Computation.Operator.Times -> operands.reduce(ULong::times)
-				Computation.Operator.Divide -> operands.reduce(ULong::div)
-			}
-		}
-
-		val part2 = null
-
-		return Solutions(part1, part2)
-	}
-
-	data class Computation(val operator: Operator, val operands: List<ULong>) {
-		enum class Operator { Plus, Minus, Times, Divide }
-	}
-
-	fun processInput(input: String): List<Computation> =
-		input.lines()
+		val part1 = input.lines()
 			.map { it.split(" ").filter(String::isNotEmpty) }
 			.let { table ->
 				if (table.isEmpty()) return@let emptyList()
@@ -36,15 +16,53 @@ object Day06 : Day("2025", "06") {
 					}
 				}
 			}
-			.map {
-				val operator = when (it.last()) {
-					"+" -> Computation.Operator.Plus
-					"-" -> Computation.Operator.Minus
-					"*" -> Computation.Operator.Times
-					"/" -> Computation.Operator.Divide
-					else -> error("unknown operator")
-				}
+			.fold(mutableListOf<ULong>()) { results, it ->
+				results.apply {
+					val operation: (ULong, ULong) -> ULong = when (it.last()) {
+						"+" -> ULong::plus
+						"-" -> ULong::minus
+						"*" -> ULong::times
+						"/" -> ULong::div
+						else -> error("unknown operator")
+					}
 
-				Computation(operator, it.dropLast(1).map(String::toULong))
+					add(it.dropLast(1).map(String::toULong).reduce(operation))
+				}
 			}
+			.sum()
+
+		val part2 = Grid(input.lines()).columns(rowOrder = RightToLeft).toList().let { columns ->
+			val results = mutableListOf<ULong>()
+			val operands = mutableListOf<ULong>()
+			val operand = StringBuilder()
+			for (column in columns) {
+				for (cell in column) {
+					if (!operand.isEmpty() && !cell.value.isDigit()) {
+						operands.add(operand.toString().toULong())
+						operand.clear()
+					}
+
+					if (cell.value in "+-*/") {
+						val operation: (ULong, ULong) -> ULong = when (cell.value) {
+							'+' -> ULong::plus
+							'-' -> ULong::minus
+							'*' -> ULong::times
+							'/' -> ULong::div
+							else -> error("unreachable")
+						}
+						results.add(operands.reduce(operation))
+						operands.clear()
+					}
+
+					if (cell.value.isDigit()) {
+						operand.append(cell.value)
+					}
+				}
+			}
+
+			results.sum()
+		}
+
+		return Solutions(part1, part2)
+	}
 }

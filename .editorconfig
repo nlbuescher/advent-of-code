@@ -1,0 +1,16 @@
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+tab_width = unset
+
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[**/{input,resources}/*.txt]
+insert_final_newline = false
+trim_trailing_whitespace = false
+
+[*.kt]
+trim_trailing_whitespace = false
